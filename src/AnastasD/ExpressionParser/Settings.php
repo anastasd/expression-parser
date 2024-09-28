@@ -102,35 +102,67 @@ class Settings
         }
     }
 
+    /**
+     * Sets a new functionRegex
+     * @param string $regexStr the regex that matches function names
+     * @return void
+     */
     public function setFunctionRegex(string $regexStr)
     {
         $this->functionRegex = $regexStr;
     }
 
+    /**
+     * Sets a new variableRegex
+     * @param string $regexStr the regex that matches variable names
+     * @return void
+     */
     public function setvariableRegex(string $regexStr)
     {
         $this->variableRegex = $regexStr;
     }
 
+    /**
+     * Sets a new paramPrefix
+     * @param string $prefix the new parameter prefix
+     * @return void
+     */
     public function setParamPrefix(string $prefix)
     {
         $this->paramPrefix = $prefix;
     }
 
+    /**
+     * Sets a new longTemplate
+     * @param string $template the new long template
+     * @return void
+     */
     public function setLongTemplate(string $template)
     {
         $this->longTemplate = $template;
     }
 
+    /**
+     * Sets a new compressedTemplate
+     * @param string $template the new compressed template
+     * @return void
+     */
     public function setCompressedTemplate(string $template)
     {
         $this->compressedTemplate = $template;
     }
 
     /**
-     * @param string $symbol - the symbol of the operator
+     * Adds a new operator or replaces an existing one
+     * @param string $symbol the symbol of the operator
+     * @param string $arity the arity of the operator
+     * @param int $order or order of execution (begger number means priority)
+     * @param string $compilerCall the name of the function in the compiler that corresponds to this operator
+     * @param callable $compilerCallback
+     * @param string $evaluatorCall
+     * @param callable $evaluatorCallback
+     * @return void
      */
-
     public function setOperator(
         string $symbol,
         string $arity,
