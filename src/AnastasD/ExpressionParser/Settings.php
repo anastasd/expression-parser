@@ -153,14 +153,14 @@ class Settings
     }
 
     /**
-     * Adds a new operator or replaces an existing one
+     * Adds a new operator to the mapper or replaces an existing one
      * @param string $symbol the symbol of the operator
      * @param string $arity the arity of the operator
-     * @param int $order or order of execution (begger number means priority)
+     * @param int $order order of execution (begger number means priority)
      * @param string $compilerCall the name of the function in the compiler that corresponds to this operator
-     * @param callable $compilerCallback
-     * @param string $evaluatorCall
-     * @param callable $evaluatorCallback
+     * @param callable $compilerCallback the function that will return the compiled source
+     * @param string $evaluatorCall the name of the function in the evaluator that corresponds to this operator
+     * @param callable $evaluatorCallback the function that will execute evaluation
      * @return void
      */
     public function setOperator(
@@ -198,6 +198,12 @@ class Settings
         $this->evaluator->evaluatorHelper->setExpression($evaluatorCall, $evaluatorCallback);
     }
 
+    /**
+     * Removes an operator from the mapper
+     * @param string $symbol symbol of the operator
+     * @param bool $removeExpression if true removes the functions from the compiler and the evaluator
+     * @return void
+     */
     public function removeOperator(string $symbol, bool $removeExpression = false)
     {
         $operator = $this->compiler->mapper::$operators[$symbol];
@@ -214,6 +220,17 @@ class Settings
         }
     }
 
+    /**
+     * Adds a new function to the mapper or replaces an existing one
+     * @param string $name the name of the function
+     * @param string $minArgs the minimum amount of argument the function takes
+     * @param int $maxArgs the maximum amount of argument the function takes
+     * @param string $compilerCall the name of the function in the compiler that corresponds to this function
+     * @param callable $compilerCallback the function that will return the compiled source
+     * @param string $evaluatorCall the name of the function in the evaluator that corresponds to this function
+     * @param callable $evaluatorCallback the function that will execute evaluation
+     * @return void
+     */
     public function setFunction(
         string $name,
         int $minArgs,
@@ -249,6 +266,12 @@ class Settings
         $this->evaluator->evaluatorHelper->setExpression($evaluatorCall, $evaluatorCallback);
     }
 
+    /**
+     * Removes a function from the mapper
+     * @param string $name name of the function
+     * @param bool $removeExpression if true removes the functions from the compiler and the evaluator
+     * @return void
+     */
     public function removeFunction(string $name, bool $removeExpression = false)
     {
         $function = $this->compiler->mapper::$functions[$name];

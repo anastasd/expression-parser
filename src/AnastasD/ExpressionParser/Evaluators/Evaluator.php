@@ -16,7 +16,7 @@ abstract class Evaluator
     public array $operators;
     public array $functions;
     public array $brackets;
-    public array $parameterSeparators;
+    public array $argsSeparators;
     public array $quotemarks;
     public array $options = [];
     public array $values = [];
@@ -28,7 +28,7 @@ abstract class Evaluator
         $this->operators = $this->mapper::$operators;
         $this->functions = $this->mapper::$functions;
         $this->brackets = $this->mapper::$brackets;
-        $this->parameterSeparators = $this->mapper::$parameterSeparators;
+        $this->argsSeparators = $this->mapper::$argsSeparators;
         $this->quotemarks = $this->mapper::$quotemarks;
 
         $this->evaluatorHelper = $helper;

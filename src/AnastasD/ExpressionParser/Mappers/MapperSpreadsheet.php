@@ -51,6 +51,6 @@ class MapperSpreadsheet extends Mapper
 
     static $functions = [];
     static $brackets = [['(', ')'], ['[', ']']];
-    static $parameterSeparators = [',', ';'];
+    static $argsSeparators = [',', ';'];
     static $quotemarks = ['"', '\''];
 }

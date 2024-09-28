@@ -21,7 +21,7 @@ abstract class Mapper
     public static $functions = [];
 
     public static $brackets = []; // [left,right]
-    public static $parameterSeparators = []; // Used to separate parameters in functions
+    public static $argsSeparators = []; // Used to separate parameters in functions
 
     public static $quotemarks = [];
 }

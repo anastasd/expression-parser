@@ -16,7 +16,7 @@ abstract class Compiler
     public array $operators;
     public array $functions;
     public array $brackets;
-    public array $parameterSeparators;
+    public array $argsSeparators;
     public array $quotemarks;
     public array $options;
 
@@ -27,7 +27,7 @@ abstract class Compiler
         $this->operators = $this->mapper::$operators;
         $this->functions = $this->mapper::$functions;
         $this->brackets = $this->mapper::$brackets;
-        $this->parameterSeparators = $this->mapper::$parameterSeparators;
+        $this->argsSeparators = $this->mapper::$argsSeparators;
         $this->quotemarks = $this->mapper::$quotemarks;
 
         $this->compilerHelper = $helper;
@@ -129,14 +129,14 @@ abstract class Compiler
             $result = array_pop($replace_array);
 
             $search_array = ["{{FUNCTION_PARAMS}}", "{{FUNCTION_BODY}}", "{{FUNCTION_RESULT}}"];
-            $replace_array = [implode($this->parameterSeparators[0], $this->variables)];
+            $replace_array = [implode($this->argsSeparators[0], $this->variables)];
             $replace_array[] = "";
             $replace_array[] = $result;
 
             $output = str_replace($search_array, $replace_array, $this->settings->compressedTemplate);
         } else {
             $search_array = ["{{FUNCTION_PARAMS}}", "{{FUNCTION_BODY}}", "{{FUNCTION_RESULT}}"];
-            $replace_array[] = implode($this->parameterSeparators[0], $this->variables);
+            $replace_array[] = implode($this->argsSeparators[0], $this->variables);
 
             $replace_array[] = array_reduce($queue, function ($carry, $item) {
                 $carry .= $item[0] . '=' . $item[1] . ';';

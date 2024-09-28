@@ -323,6 +323,6 @@ class MapperPHP extends Mapper
     ];
 
     static $brackets = [['(', ')']];
-    static $parameterSeparators = [',', ';'];
+    static $argsSeparators = [',', ';'];
     static $quotemarks = ['"', '\''];
 }

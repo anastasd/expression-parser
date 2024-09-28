@@ -15,7 +15,7 @@ class Parser
 
     private array $_inverseOperators = [];
     private array $_inverseFunctions = [];
-    private array $_inverseParameterSeparators = [];
+    private array $_inverseargsSeparators = [];
     private array $_inverseQuotemarks = [];
     private array $_inverseVaribles = [];
     private array $_bracketPairs = [];
@@ -49,16 +49,16 @@ class Parser
     {
         $this->_inverseOperators = array_fill_keys(array_keys($this->settings->compiler->operators), 'operator');
         $this->_inverseFunctions = array_fill_keys(array_keys($this->settings->compiler->functions), 'function');
-        $this->_inverseParameterSeparators = array_fill_keys($this->settings->compiler->parameterSeparators, 'parameter_separator');
+        $this->_inverseargsSeparators = array_fill_keys($this->settings->compiler->argsSeparators, 'parameter_separator');
         $this->_inverseQuotemarks = array_fill_keys($this->settings->compiler->quotemarks, 'quotemark');
 
         $this->_direct = array_merge(
             array_keys($this->settings->compiler->operators),
             array_keys($this->settings->compiler->functions),
-            $this->settings->compiler->parameterSeparators,
+            $this->settings->compiler->argsSeparators,
             $this->settings->compiler->quotemarks
         );
-        $this->_inverse = array_merge($this->_inverseOperators, $this->_inverseFunctions, $this->_inverseParameterSeparators, $this->_inverseQuotemarks);
+        $this->_inverse = array_merge($this->_inverseOperators, $this->_inverseFunctions, $this->_inverseargsSeparators, $this->_inverseQuotemarks);
     }
 
     private function _initializeBracketLookup(): void
