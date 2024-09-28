@@ -30,6 +30,10 @@ class Parser
 
     public array $queue = [];
 
+    /**
+     * Initialisation of the parser.
+     * @param \AnastasD\ExpressionParser\Settings $settings - settings of the parser
+     */
     public function __construct(Settings $settings)
     {
         $this->settings = $settings;
@@ -67,6 +71,12 @@ class Parser
         }
     }
 
+    /**
+     * Parses the input 
+     * @param string $input - the string that shall be parsed
+     * @param array $variables - a list of variables that shall be searched in the input
+     * @return static
+     */
     public function parse(string $input, array $variables = [])
     {
         /* First - reset the counters */
@@ -112,6 +122,11 @@ class Parser
         return $this;
     }
 
+    /**
+     * Runs the validators and sorts the nodeList in order of execution
+     * @throws \AnastasD\ExpressionParser\Exceptions\ParsingException
+     * @return \AnastasD\ExpressionParser\Parser
+     */
     public function prepare(): self
     {
         /* Fix if the first content item is minus or plus */
@@ -142,16 +157,31 @@ class Parser
         return $this;
     }
 
+    /**
+     * Evaluates the input with values for the variables
+     * @param array $values the values that shall be used in the evaluation
+     * @param array $options not used for now
+     * @return string
+     */
     public function evaluate(array $values = null, array $options = null)
     {
         return $this->settings->evaluator->prepareEvaluate($this->settings, $this->_nodesList, $values, $this->variables, $options);
     }
 
+    /**
+     * Compiles the nodes after successfull parsing
+     * @param array $options if "compress" is provided then the returned code is shorter
+     * @return string
+     */
     public function compile(array $options = null)
     {
         return $this->settings->compiler->prepareCompile($this->settings, $this->_nodesList, $this->variables, $options);
     }
 
+    /**
+     * Returns the list of nodes after successfull parsing
+     * @return array
+     */
     public function getNodeList() {
         return $this->_nodesList;
     }

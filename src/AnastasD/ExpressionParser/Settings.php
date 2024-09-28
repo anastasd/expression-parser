@@ -19,6 +19,11 @@ class Settings
     public Evaluators\Evaluator $evaluator;
     public Compilers\Compiler $compiler;
 
+    /**
+     * Summary of __construct
+     * @param int $mode - Default, PHP, Javascript, Spreadsheet or Custom
+     * @param array $options if CUSTOM is chosen then mapper, compiler and evaluator shall be provided as options
+     */
     public function __construct(int $mode = self::DEFAULT , array $options = null)
     {
         switch ($mode) {

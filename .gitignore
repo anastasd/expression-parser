@@ -2,6 +2,8 @@
 /wf
 
 composer.phar
+phpDocumentor.phar
 
 .env
+.phpdoc
 .vscode
