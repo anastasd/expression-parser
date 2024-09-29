@@ -371,6 +371,30 @@ class Parser
 
         $buffer = '';
         $bufferType = '';
+        
+        
+        // Parse 'plain'
+        $this->_cNode = $this->_nodeCter;
+        $this->_nodeCter++;
+        $this->_nodesList[$this->_nodeCter] = [
+            'id' => $this->_nodeCter,
+            'type' => 'node',
+            'content' => [],
+            'parent' => $this->_cNode,
+            'min_ref' => PHP_INT_MAX
+        ];
+
+        $this->_nodesList[$this->_cNode]['content'][] = [
+            'type' => 'ref',
+            'value' => $this->_nodeCter
+        ];
+        $this->_nodesList[$this->_cNode]['min_ref'] = min($this->_nodesList[$this->_cNode]['min_ref'], $this->_nodeCter);
+
+        $this->_cNode = $this->_nodeCter;
+
+        $this->_scan($plain);
+
+        $this->_cNode = $this->_nodesList[$this->_cNode]['parent'];        
     }
 
     private function _parseFunction(&$chars, &$charCter, &$buffer, &$bufferType, $charsLength): void
