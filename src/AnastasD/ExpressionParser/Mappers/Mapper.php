@@ -9,7 +9,7 @@ namespace AnastasD\ExpressionParser\Mappers;
 abstract class Mapper
 {
     /**
-     * example
+     * @example
      *   '+' => [
      *       'arity' => 'binary',
      *       'order' => 0,
@@ -21,7 +21,7 @@ abstract class Mapper
     public static $functions = [];
 
     public static $brackets = []; // [left,right]
-    public static $argsSeparators = []; // Used to separate parameters in functions
+    public static $argsSeparators = []; // Used to separate arguments in functions
 
     public static $quotemarks = [];
 }

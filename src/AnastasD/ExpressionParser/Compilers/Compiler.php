@@ -59,7 +59,8 @@ abstract class Compiler
 
                     $queue[] = [
                         $this->settings->paramPrefix . $item["id"],
-                        $this->compilerHelper->{$this->functions[$item["name"]]["compile"]}($args)
+                        $this->compilerHelper->{$this->functions[$item["name"]]["compile"]}($args),
+                        "function"
                     ];
 
                     break;
@@ -71,7 +72,8 @@ abstract class Compiler
                     if (1 === $contentCter) {
                         $queue[] = [
                             $this->settings->paramPrefix . $item["id"],
-                            "ref" === $item["content"][0]["type"] ? $this->settings->paramPrefix . $item["content"][0]["value"] : $item["content"][0]["value"]
+                            "ref" === $item["content"][0]["type"] ? $this->settings->paramPrefix . $item["content"][0]["value"] : $item["content"][0]["value"],
+                            null
                         ];
                     } else {
                         while (1 < $contentCter) {
@@ -90,7 +92,8 @@ abstract class Compiler
 
                                     $queue[] = [
                                         $this->settings->paramPrefix . $item["id"] . '_' . $queueCter,
-                                        $this->compilerHelper->{$this->operators[$tmpContent[$i]["value"]]["compile"]}($args)
+                                        $this->compilerHelper->{$this->operators[$tmpContent[$i]["value"]]["compile"]}($args),
+                                        "operator"
                                     ];
 
                                     $tmpContent[$i - 1] = [
@@ -109,7 +112,8 @@ abstract class Compiler
 
                         $queue[] = [
                             $this->settings->paramPrefix . $item["id"],
-                            $tmpContent[0]["value"]
+                            $tmpContent[0]["value"],
+                            null
                         ];
                     }
                     break;

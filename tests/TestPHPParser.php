@@ -16,9 +16,9 @@ class TestPHPParser extends TestCase
 
         $output = $parser->parse($input)
             ->prepare()
-            ->compile([]);
+            ->compile();
 
-        $this->assertEquals('function expressionResult(  ){ $param_0_0=3+2; return $param_0_0 ;}', $output);
+        $this->assertEquals('function expressionResult(  ){ $param_0_0=(3+2); return $param_0_0 ;}', $output);
     }
 
     public function testFunctionsPHPCompilator()
@@ -32,7 +32,7 @@ class TestPHPParser extends TestCase
             ->prepare()
             ->compile([]);
 
-        $this->assertEquals('function expressionResult( $a,$b ){ $param_2=3;$param_5_0=6/$b;$param_5=$param_5_0;$param_4=floor($param_5);$param_3_0=$a-$param_4;$param_3=$param_3_0;$param_1=pow($param_2, $param_3); return $param_1 ;}', $output);
+        $this->assertEquals('function expressionResult( $a,$b ){ $param_2=3;$param_5_0=6/$b;$param_5=$param_5_0;$param_4=floor($param_5);$param_3_0=($a-$param_4);$param_3=$param_3_0;$param_1=pow($param_2, $param_3); return $param_1 ;}', $output);
     }
 
     public function testCompressionPHPCompilator()
@@ -46,7 +46,7 @@ class TestPHPParser extends TestCase
             ->prepare()
             ->compile(["compress"]);
 
-        $this->assertEquals('function expressionResult( $a,$b ){ return pow(3, $a-floor(6/$b)) ;}', $output);
+        $this->assertEquals('function expressionResult( $a,$b ){ return pow(3, ($a-floor(6/$b))) ;}', $output);
     }
 
     public function testTemplatePHPCompilator()
@@ -62,7 +62,7 @@ class TestPHPParser extends TestCase
             ->prepare()
             ->compile(["compress"]);
 
-        $this->assertEquals('pow(3, $a-floor(6/$b))', $output);
+        $this->assertEquals('pow(3, ($a-floor(6/$b)))', $output);
     }
 
     public function testBasicPHPEvaluator()

@@ -11,11 +11,12 @@ class Parser
     public string|null $functionRegex;
 
     public string $input = '';
-    public array $paramSeparators = [];
+    public array $argsSeparators = [];
+    private string $_bracketsList = "";
 
     private array $_inverseOperators = [];
     private array $_inverseFunctions = [];
-    private array $_inverseargsSeparators = [];
+    private array $_inverseArgsSeparators = [];
     private array $_inverseQuotemarks = [];
     private array $_inverseVaribles = [];
     private array $_bracketPairs = [];
@@ -43,13 +44,14 @@ class Parser
 
         $this->variableRegex = $this->settings->variableRegex ?? null;
         $this->functionRegex = $this->settings->functionRegex ?? null;
+        $this->argsSeparators = $this->settings->compiler->argsSeparators;
     }
 
     private function _initializeInverseLookup(): void
     {
         $this->_inverseOperators = array_fill_keys(array_keys($this->settings->compiler->operators), 'operator');
         $this->_inverseFunctions = array_fill_keys(array_keys($this->settings->compiler->functions), 'function');
-        $this->_inverseargsSeparators = array_fill_keys($this->settings->compiler->argsSeparators, 'parameter_separator');
+        $this->_inverseArgsSeparators = array_fill_keys($this->settings->compiler->argsSeparators, 'args_separator');
         $this->_inverseQuotemarks = array_fill_keys($this->settings->compiler->quotemarks, 'quotemark');
 
         $this->_direct = array_merge(
@@ -58,7 +60,7 @@ class Parser
             $this->settings->compiler->argsSeparators,
             $this->settings->compiler->quotemarks
         );
-        $this->_inverse = array_merge($this->_inverseOperators, $this->_inverseFunctions, $this->_inverseargsSeparators, $this->_inverseQuotemarks);
+        $this->_inverse = array_merge($this->_inverseOperators, $this->_inverseFunctions, $this->_inverseArgsSeparators, $this->_inverseQuotemarks);
     }
 
     private function _initializeBracketLookup(): void
@@ -68,6 +70,8 @@ class Parser
             $this->_inverse[$item[1]] = 'right_bracket';
             $this->_bracketPairs[$item[1]] = $item[0];
             $this->_bracketLevels[$item[0]] = 0;
+
+            $this->_bracketsList .= $item[0] . $item[1];
         }
     }
 
@@ -82,13 +86,15 @@ class Parser
         /* First - reset the counters */
         $this->_nodeCter = 0;
         $this->_cNode = 0;
-        $this->_nodesList = [[
-            'type' => 'node',
-            'id' => 0,
-            'min_ref' => PHP_INT_MAX,
-            'parent' => null,
-            'content' => []
-        ]];
+        $this->_nodesList = [
+            [
+                'type' => 'node',
+                'id' => 0,
+                'min_ref' => PHP_INT_MAX,
+                'parent' => null,
+                'content' => []
+            ]
+        ];
 
         $this->variables = $variables;
         $this->_inverseVaribles = array_fill_keys($this->variables, 'variable');
@@ -182,7 +188,8 @@ class Parser
      * Returns the list of nodes after successfull parsing
      * @return array
      */
-    public function getNodeList() {
+    public function getNodeList()
+    {
         return $this->_nodesList;
     }
 
@@ -199,31 +206,6 @@ class Parser
             $bufferPlusOne = $buffer . $chars[$charCter];
 
             if (
-                ' ' === $chars[$charCter]
-            ) {
-                $bufferType = $this->_inverse[$buffer];
-
-                switch ($bufferType) {
-                    case 'operator':
-                        $this->_parseOperator($chars, $charCter, $buffer, $bufferType, $charsLength);
-                        break;
-                    case 'left_bracket':
-                        $this->_parseLeftBracket($chars, $charCter, $buffer, $bufferType, $charsLength);
-                        break;
-                    case 'function':
-                        $this->_parseFunction($chars, $charCter, $buffer, $bufferType, $charsLength);
-                        break;
-                    case 'quotemark':
-                        $this->_parseQuotemark($chars, $charCter, $buffer, $bufferType, $charsLength);
-                        break;
-                    case 'variable':
-                        $this->_parseVariable($chars, $charCter, $buffer, $bufferType, $charsLength);
-                        break;
-                }
-
-                $buffer = '';
-                $charCter++;
-            } elseif (
                 "" !== $buffer // Otherwise the loop might be infinite
                 && array_key_exists($buffer, $this->_inverse)  // If there is a match
                 && (0 === count( // ... but there are no other candidates.
@@ -371,8 +353,8 @@ class Parser
 
         $buffer = '';
         $bufferType = '';
-        
-        
+
+
         // Parse 'plain'
         $this->_cNode = $this->_nodeCter;
         $this->_nodeCter++;
@@ -394,7 +376,7 @@ class Parser
 
         $this->_scan($plain);
 
-        $this->_cNode = $this->_nodesList[$this->_cNode]['parent'];        
+        $this->_cNode = $this->_nodesList[$this->_cNode]['parent'];
     }
 
     private function _parseFunction(&$chars, &$charCter, &$buffer, &$bufferType, $charsLength): void
@@ -432,7 +414,7 @@ class Parser
                     break;
                 case (
                 array_key_exists($chars[$charCter], $this->_inverse)
-                && 'parameter_separator' === $this->_inverse[$chars[$charCter]]
+                && 'args_separator' === $this->_inverse[$chars[$charCter]]
                 && 1 === $this->_bracketLevels[$openingBracket]
                 ):
                     if ('' !== $plain) {
@@ -448,7 +430,7 @@ class Parser
             $charCter++;
         } while (!empty(array_filter($this->_bracketLevels)) && $charCter < $charsLength); // A hack to quickly check if all items in $this->_bracketLevels are equal to zero
 
-        $trimmed = substr($plain, 0, -1);
+        $trimmed = trim($plain, $this->_bracketsList);
         if ('' !== $trimmed) {
             $node['params'][] = $trimmed;
         }

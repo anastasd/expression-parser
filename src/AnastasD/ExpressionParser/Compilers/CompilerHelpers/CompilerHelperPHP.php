@@ -11,7 +11,7 @@ class CompilerHelperPHP extends CompilerHelper
     /* #region Operators */
     public function add(array $args)
     {
-        return "$args[0]+$args[1]";
+        return "($args[0]+$args[1])";
     }
 
     public function divide(array $args)
@@ -25,7 +25,7 @@ class CompilerHelperPHP extends CompilerHelper
 
     public function modulus(array $args)
     {
-        return "$args[0]%$args[1]";
+        return "($args[0]%$args[1])";
     }
 
     public function multiply(array $args)
@@ -35,12 +35,12 @@ class CompilerHelperPHP extends CompilerHelper
 
     public function power(array $args)
     {
-        return "$args[0]**$args[1]";
+        return "($args[0]**$args[1])";
     }
 
     public function subtract(array $args)
     {
-        return "$args[0]-$args[1]";
+        return "($args[0]-$args[1])";
     }
 
     /* #endregion */
