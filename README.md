@@ -29,7 +29,7 @@ $parser = new Parser($settings);
 
 $input = '-pow($a, 2) * sin(log($b)) + cos(sqrt($c)) * exp(tan($d)) / log(abs($e)) - sqrt(pow($f, 3))';
 
-$outputSource = $parser->parse($input, ['$a', '$b', '$c', '$d', '$e', '$f'])
+echo $parser->parse($input, ['$a', '$b', '$c', '$d', '$e', '$f'])
      ->prepare()
      ->compile();
 ```
@@ -43,7 +43,7 @@ $parser = new Parser($settings);
 
 $input = '-pow($a, 2) * sin(log($b)) + cos(sqrt($c)) * exp(tan($d)) / log(abs($e)) - sqrt(pow($f, 3))';
 
-$outputSource = $parser->parse($input, ['$a', '$b', '$c', '$d', '$e', '$f'])
+echo $parser->parse($input, ['$a', '$b', '$c', '$d', '$e', '$f'])
      ->prepare()
      ->evaluate([1, 2, 3, 4, 5, 6]);
 ```
