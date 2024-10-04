@@ -123,8 +123,6 @@ class Parser
 
         Validators\Validator::checkFunctionArgsCount($this->_nodesList, $this->settings->compiler->mapper);
 
-        // echo json_encode($this->_nodesList) . "\n\n";
-
         return $this;
     }
 
@@ -430,9 +428,9 @@ class Parser
             $charCter++;
         } while (!empty(array_filter($this->_bracketLevels)) && $charCter < $charsLength); // A hack to quickly check if all items in $this->_bracketLevels are equal to zero
 
-        $trimmed = trim($plain, $this->_bracketsList);
-        if ('' !== $trimmed) {
-            $node['params'][] = $trimmed;
+
+        if (array_key_exists($chars[$charCter - 1], $this->_bracketPairs) && 1 < strlen($plain)) {
+            $node['params'][] = substr($plain, 0, -1);
         }
 
         $node['id'] = $this->_nodeCter;
