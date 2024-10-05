@@ -121,8 +121,6 @@ class Parser
 
         $this->_scan($this->input);
 
-        Validators\Validator::checkFunctionArgsCount($this->_nodesList, $this->settings->compiler->mapper);
-
         return $this;
     }
 
@@ -133,6 +131,9 @@ class Parser
      */
     public function prepare(): self
     {
+        /* Check if all parsed functions have required number of arguments */
+        Validators\Validator::checkFunctionArgsCount($this->_nodesList, $this->settings->compiler->mapper);
+
         /* Fix if the first content item is minus or plus */
         /* Fix if the length of content is an even number */
         foreach ($this->_nodesList as &$node) {
