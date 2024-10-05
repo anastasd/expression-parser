@@ -1,6 +1,8 @@
 # Expression Parser
 A PHP library for parsing arithmetic expressions and functions in different programming languages
 
+## Installation
+`anastasd/expression-parser`
 
 ## How can the Expression Parser help?
 - If you need to run code that uses unsafe input, the parser ensures no harm is done to the server or other code.
