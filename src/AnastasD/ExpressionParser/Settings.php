@@ -117,7 +117,7 @@ class Settings
      * @param string $regexStr the regex that matches variable names
      * @return void
      */
-    public function setvariableRegex(string $regexStr)
+    public function setVariableRegex(string $regexStr)
     {
         $this->variableRegex = $regexStr;
     }

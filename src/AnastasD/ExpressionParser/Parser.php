@@ -121,8 +121,6 @@ class Parser
 
         $this->_scan($this->input);
 
-        Validators\Validator::checkFunctionArgsCount($this->_nodesList, $this->settings->compiler->mapper);
-
         return $this;
     }
 
@@ -133,6 +131,9 @@ class Parser
      */
     public function prepare(): self
     {
+        /* Check if all parsed functions have required number of arguments */
+        Validators\Validator::checkFunctionArgsCount($this->_nodesList, $this->settings->compiler->mapper);
+
         /* Fix if the first content item is minus or plus */
         /* Fix if the length of content is an even number */
         foreach ($this->_nodesList as &$node) {
@@ -251,6 +252,12 @@ class Parser
                 && preg_match($this->variableRegex, $buffer)
                 && !preg_match($this->variableRegex, $bufferPlusOne)  // Better solution??
             ) {
+                if (!array_key_exists($buffer, $this->_inverseVaribles)) {
+                    $this->variables[] = $buffer;
+                    $this->_inverseVaribles[$buffer] = "variable";
+                    $this->_inverse[$buffer] = "variable";
+                }
+
                 $this->_parseVariable($chars, $charCter, $buffer, $bufferType, $charsLength);
             } elseif (
                 is_numeric($buffer)
@@ -285,6 +292,12 @@ class Parser
                 null !== $this->variableRegex
                 && preg_match($this->variableRegex, $buffer)
             ) {
+                if (!array_key_exists($buffer, $this->_inverseVaribles)) {
+                    $this->variables[] = $buffer;
+                    $this->_inverseVaribles[$buffer] = "variable";
+                    $this->_inverse[$buffer] = "variable";
+                }
+
                 $this->_parseVariable($chars, $charCter, $buffer, $bufferType, $charsLength);
             } elseif (is_numeric($buffer)) {
                 $this->_parseNumber($chars, $charCter, $buffer, $bufferType, $charsLength);
