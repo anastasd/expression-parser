@@ -29,9 +29,9 @@ class TestRegex
 
         $parser = new Parser($settings);
 
-        $input = '$a+1';
+        $input = '$period+1';
 
-        $output = $parser->parse($input, ['$a'])
+        $output = $parser->parse($input, ['$period'])
             ->prepare()
             ->compile(["compress"]);
 
